@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>choreonoid_ros_control</name>
+  <version>0.0.1</version>
+  <description>The choreonoid_ros_control package</description>
+
+  <maintainer email="groadpg@gmail.com">RyodoTanaka</maintainer>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>choreonoid</depend>
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>control_toolbox</depend>
+  <depend>controller_manager</depend>
+  <depend>pluginlib</depend>
+  <depend>hardware_interface</depend>
+  <depend>transmission_interface</depend>
+  <depend>joint_limits_interface</depend>
+  <depend>angles</depend>
+  <depend>urdf</depend>
+  
+  <export>
+    <build_type>cmake</build_type>
+    <choreonoid_ros_control plugin="${prefix}/robot_hw_sim_plugins.xml"/>
+  </export>
+</package>
