@@ -29,7 +29,7 @@ bool ChoreonoidRosControlPlugin::initialize(cnoid::SimpleControllerIO* io)
   std::replace(robot_namespace_.begin(), robot_namespace_.end(), '-', '_');
   
   // Get robot description & transmission
-  robot_description_ = "robot_description";
+  robot_description_ = robot_namespace_ + "/robot_description";
   const std::string urdf_string = getURDF(robot_description_);
   if (!parseTransmissionsFromURDF(urdf_string)) {
     ROS_ERROR_NAMED("choreonoid_ros_control", "Error parsing URDF in choreonoid_ros_control plugin, plugin not active.\n");
