@@ -99,7 +99,7 @@ bool DefaultRobotHWSim::initSim(
     // Add data from transmission
     joint_position_[i] = link->q();
     joint_velocity_[i] = link->dq();
-    joint_effort_[i] = link->u();
+    joint_effort_[i] = link->ddq();
     joint_position_command_[i] = joint_position_[i];
     joint_velocity_command_[i] = joint_velocity_[i];
     joint_effort_command_[i] = joint_effort_[i];
@@ -203,7 +203,7 @@ void DefaultRobotHWSim::readSim(ros::Time time, ros::Duration period)
       joint_position_[i] += angles::shortest_angular_distance(joint_position_[i], position);
   
     joint_velocity_[i] = sim_links_[i]->dq();
-    joint_effort_[i] = sim_links_[i]->u();
+    joint_effort_[i] = sim_links_[i]->ddq();
   }
 }
 
@@ -231,7 +231,7 @@ void DefaultRobotHWSim::writeSim(ros::Time time, ros::Duration period)
     switch (joint_control_methods_[i]) {
       case EFFORT: {
         const double effort = e_stop_active_ ? 0 : joint_effort_command_[i];
-        sim_links_[i]->ddq() = effort;
+        sim_links_[i]->u() = effort;
       }
         break;
       case POSITION: {
@@ -258,7 +258,7 @@ void DefaultRobotHWSim::writeSim(ros::Time time, ros::Duration period)
 
         const double effort_limit = joint_effort_limits_[i];
         const double effort = clamp(pid_controllers_[i].computeCommand(error, period),-effort_limit, effort_limit);
-        sim_links_[i]->ddq() = effort;
+        sim_links_[i]->u() = effort;
       }
         break;
       case VELOCITY:
@@ -273,7 +273,7 @@ void DefaultRobotHWSim::writeSim(ros::Time time, ros::Duration period)
           error = joint_velocity_command_[i] - joint_velocity_[i];
         const double effort_limit = joint_effort_limits_[i];
         const double effort = clamp(pid_controllers_[i].computeCommand(error, period), -effort_limit, effort_limit);
-        sim_links_[i]->ddq() = effort;
+        sim_links_[i]->u() = effort;
         break;
     }
   }
